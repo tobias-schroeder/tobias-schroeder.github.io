@@ -1,8 +1,6 @@
-## Welcome to GitHub Pages
+## Tobias Schröder
 
-You can use the [editor on GitHub](https://github.com/tobias-schroeder/tobias-schroeder.github.io/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+My name is Tobias Schröder. I am a PhD student in Mathematics at Imperial College London supervised by [Andrew Duncan](https://www.ma.imperial.ac.uk/~aduncan/) and [Greg Pavliotis] (https://www.ma.imperial.ac.uk/~pavl/).
 
 ### Markdown
 
