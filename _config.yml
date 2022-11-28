@@ -3,4 +3,4 @@ permalink: /:title/
 theme: jekyll-theme-minimal
 
 navigation:
-  -{file: "README.md", icon: home}
+  - {file: "README.md", icon: home}
