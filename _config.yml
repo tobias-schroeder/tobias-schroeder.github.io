@@ -3,5 +3,5 @@ permalink: /:title/
 theme: jekyll-theme-minimal
 
 navigation:
-  - {file: "README.md", title: Home, icon: home}
-  - {file: "Projects.md", title: Projects}
+  - {file: "README.md", title: "Home", icon: home}
+  - {file: "Projects.md", title: "Projects"}
