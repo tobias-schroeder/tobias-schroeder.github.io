@@ -1,4 +1,4 @@
-![Tobias Schroeder](https://github.com/tobias-schroeder/tobias-schroeder.github.io/blob/391ada49778d9575a65fcd2d74ca0347d113d549/Images/TobiasWA.jpg)
+![Tobias Schroeder](Images/TobiasWA.jpg)
 
 I am a PhD student in Mathematics at Imperial College London supervised by [Andrew Duncan](https://www.ma.imperial.ac.uk/~aduncan/) and [Greg Pavliotis](https://www.ma.imperial.ac.uk/~pavl/).
 
