@@ -1,2 +1,3 @@
 title: Tobias Schroeder
+permalink: /:title/
 theme: jekyll-theme-minimal
