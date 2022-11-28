@@ -1,9 +1,11 @@
-My name is Tobias Schröder. I am a PhD student in Mathematics at Imperial College London supervised by [Andrew Duncan](https://www.ma.imperial.ac.uk/~aduncan/) and [Greg Pavliotis](https://www.ma.imperial.ac.uk/~pavl/).
+![Tobias Schroeder](https://github.com/tobias-schroeder/tobias-schroeder.github.io/blob/391ada49778d9575a65fcd2d74ca0347d113d549/Images/TobiasWA.jpg)
 
-### Summary
+I am a PhD student in Mathematics at Imperial College London supervised by [Andrew Duncan](https://www.ma.imperial.ac.uk/~aduncan/) and [Greg Pavliotis](https://www.ma.imperial.ac.uk/~pavl/).
+
+## Summary
 My research focuses on developing and analysing robust methodologies for unsupervised machine learning based on techniques from physics, mathematical analysis, and optimisation. Currently, I am working on an improved training methodology for energy-based models for generative modelling and inference.
 
-### Projects
+## Projects
 #### How to train your EBM without sampling or gradients
 We are currently developing a new training methodology for energy-based models which does not rely on samples (like contrastive divergence) or higher order derivatives (as in score-based methods).
 
