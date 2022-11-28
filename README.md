@@ -12,3 +12,4 @@ We are currently developing a new training methodology for energy-based models w
 
 #### Variational Inference as a gradient flow in a kernelised Wasserstein geometry
 Variational Inference optimises a training objective with gradient descent to infer optimal parameters in a parametric family of distributions, for example, to compute an approximate Bayesian posterior distribution. For my Master thesis, I formulated the training dynamics as a gradient flow in a kernelised Wasserstein geometry based on the results on [Stein geometries](https://arxiv.org/abs/1912.00894) and a [relationship between gradient flows and black box variational inference](https://arxiv.org/abs/2004.01822)
+![ParticleTransport](Images/ParticleTransport.png)
