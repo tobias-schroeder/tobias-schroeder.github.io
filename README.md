@@ -7,7 +7,7 @@ My research focuses on developing and analysing robust methodologies for unsuper
 
 ## Projects
 #### How to train your EBM without sampling or gradients
-We are currently developing a new training methodology for energy-based models which does not rely on samples (like contrastive divergence) or Stein scores (as in score-based methods). The goal are robust unbiased models for high-dimensional data. We present this idea for discrete data in our <a href="tobias-schroeder.github.io/discrete_energy_discrepancy.pdf" target="_blank">workshop paper</a>.
+We are currently developing a new training methodology for energy-based models which does not rely on samples (like contrastive divergence) or Stein scores (as in score-based methods). The goal are robust unbiased models for high-dimensional data. We present this idea for discrete data in our <a href="/discrete_energy_discrepancy.pdf" target="_blank">workshop paper</a>.
 ![EBMasGenerativeModel](Images/3DMoonsExample.png)
 
 #### Variational Inference as a gradient flow in a kernelised Wasserstein geometry
