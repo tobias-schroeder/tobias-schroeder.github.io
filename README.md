@@ -7,7 +7,7 @@ My research focuses on developing and analysing robust methodologies for unsuper
 
 ## Projects
 #### How to train your EBM without sampling or gradients
-We are currently developing a new training methodology for energy-based models which does not rely on samples (like contrastive divergence) or higher order derivatives (as in score-based methods). The goal are robust unbiased models for high-dimensional data.
+We are currently developing a new training methodology for energy-based models which does not rely on samples (like contrastive divergence) or higher order derivatives (as in score-based methods). The goal are robust unbiased models for high-dimensional data. We present this idea in the workshop paper <a href="discrete_energy_discrepancyICML.pdf" class="image fit"><img src="images/marr_pic.jpg" alt=""></a>
 ![EBMasGenerativeModel](Images/3DMoonsExample.png)
 
 #### Variational Inference as a gradient flow in a kernelised Wasserstein geometry
