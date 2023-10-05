@@ -6,8 +6,8 @@ I am a PhD student in Mathematics at Imperial College London supervised by [Andr
 My research focuses on developing and analysing robust methodologies for unsupervised machine learning based on techniques from physics, mathematical analysis, and optimisation. Currently, I am working on an improved training methodology for energy-based models for generative modelling and inference.
 
 ## Projects
-#### How to train your EBM without sampling or gradients
-We are currently developing a new training methodology for energy-based models which does not rely on samples (like contrastive divergence) or Stein scores (as in score-based methods). The goal are robust unbiased models for high-dimensional data. We present this idea for discrete data in our <a href="/discrete_energy_discrepancy.pdf" target="_blank">workshop paper</a>.
+#### How to train your EBM without Markov Chain Monte Carlo
+We propose a new training methodology for energy-based models based on Energy Discrepancy (ED) which does not rely on sampling (like contrastive divergence, short CD) or Stein scores (as in score-based methods, short SM). The goal are robust unbiased models for high-dimensional data. Our paper **"Energy Discrepancies: A Score-Independent Loss for Energy-Based Models"** can be accessed [here](https://arxiv.org/abs/2307.06431). An extension to energy-based models on discrete spaces has been presented at the ICML 2023 workshop *Sampling and Optimisation in Discrete Spaces* and can be found [here](https://arxiv.org/abs/2307.07595)
 ![EBMasGenerativeModel](Images/ComparisonED_SM_CD.png)
 
 #### Variational Inference as a gradient flow in a kernelised Wasserstein geometry
