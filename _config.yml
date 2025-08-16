@@ -1,7 +1,6 @@
 title: Tobias Schroeder
 permalink: /:title/
-#theme: jekyll-theme-minimal
-theme: minima
+theme: jekyll-theme-minimal
 
 header_pages:
   - about.md
