@@ -2,6 +2,12 @@ title: Tobias Schroeder
 permalink: /:title/
 theme: minima
 
+nav:
+  - name: "Home"
+    link: "/"
+  - name: "Projects"
+    link: "/projects"
+
 header_pages:
   - about.md
   - projects.md
