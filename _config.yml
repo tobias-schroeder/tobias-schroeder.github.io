@@ -1,6 +1,6 @@
 title: Tobias Schröder
 permalink: /:title/
-theme: minimal
+theme: jekyll-theme-minimal
 
 nav:
   - name: "Home"
