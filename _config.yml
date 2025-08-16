@@ -1,6 +1,6 @@
 title: Tobias Schröder
 permalink: /:title/
-theme: minima
+theme: minimal
 
 nav:
   - name: "Home"
