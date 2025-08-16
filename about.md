@@ -1,3 +1,10 @@
+---
+layout: page
+title: About
+permalink: /about/
+---
+
+
 ![Tobias Schroeder](Images/TobiasWA2.jpg)
 
 I am a PhD student in Mathematics at Imperial College London supervised by [Andrew Duncan](https://www.ma.imperial.ac.uk/~aduncan/) and [Greg Pavliotis](https://www.ma.imperial.ac.uk/~pavl/).
