@@ -10,6 +10,9 @@ nav:
   - name: "Projects"
     link: "/projects"
 
+plugins:
+  - jekyll-include-cache
+
 #header_pages:
 #  - about.md
 #  - projects.md
