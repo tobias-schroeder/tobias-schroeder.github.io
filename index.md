@@ -1,7 +1,16 @@
 ---
 layout: posts
-author_profile: true
+author_profile: false
 permalink: /
+
+sidebar:
+  name: "Tobias Schröder"
+  avatar: "/Images/TobiasWA.jpg"
+  location: "Department of Mathematics \n Imperial College London"
+  links:
+    - label: "Twitter"
+      icon: "fab fa-fw fa-twitter-square"
+      url: "https://x.com/tobias_schrdr"
 ---
 
 ![Tobias Schroeder](Images/TobiasWA2.jpg)
