@@ -9,6 +9,8 @@ nav:
     link: "/"
   - name: "Projects"
     link: "/projects"
+  - name: "CV"
+    link: "/cv"
 
 plugins:
   - jekyll-include-cache
