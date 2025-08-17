@@ -27,11 +27,6 @@ author:
 include:
   - assets/css/custom.css
 
-collections:
-  resume:
-    output: true
-    permalink: /:collection/:path/
-
 #header_pages:
 #  - about.md
 #  - projects.md
