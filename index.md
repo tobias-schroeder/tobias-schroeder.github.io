@@ -11,7 +11,7 @@ My research focuses on developing and analysing robust methodologies for unsuper
 
 ## Publications
 - [Deep Optimal Sensor Placement for Black Box Stochastic Simulations](https://arxiv.org/abs/2410.12036) <br>
-  Paula Cordero-Encinar, **Tobias Schröder**, Peter Yatsyshin, Andrew Duncan. AISTATs 2025
+  Paula Cordero-Encinar, **Tobias Schröder**, Peter Yatsyshin, Andrew Duncan. AISTATS 2025
 - [Training Discrete Energy-Based Models with Energy Discrepancy](https://arxiv.org/abs/2307.07595) <br>
   **Tobias Schröder**, Zijing Ou, Yingzhen Li, Andrew B. Duncan. NeurIPS 2024
 - [Energy Discrepancies: A Score-Independent Loss for Energy-Based Models](https://arxiv.org/abs/2307.06431) <br>
