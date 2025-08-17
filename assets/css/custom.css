@@ -1,0 +1,5 @@
+/* Make author sidebar photo larger */
+.sidebar .author__avatar img {
+  max-width: 200px;   /* increase this to the size you want */
+  border-radius: 50%; /* keep circular shape */
+}
