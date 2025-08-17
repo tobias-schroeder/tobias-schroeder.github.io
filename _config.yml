@@ -22,4 +22,4 @@ scholar:
   style: apa
   locale: en
   source: /_bibliography
-  bibliography: references.bib
+  bibliography: publications.bib
