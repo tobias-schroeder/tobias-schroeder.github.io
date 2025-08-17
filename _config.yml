@@ -13,6 +13,18 @@ nav:
 plugins:
   - jekyll-include-cache
 
+author:
+  name: "Tobias Schröder"
+  avatar: "/Images/TobiasWA.jpg"
+  location: "Department of Mathematics, Imperial College London"
+  links:
+    - label: "Twitter"
+      icon: "fab fa-fw fa-twitter-square"
+      url: "https://twitter.com/mmistakes"
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/mmistakes"
+
 #header_pages:
 #  - about.md
 #  - projects.md
