@@ -4,10 +4,10 @@ author_profile: false
 permalink: /
 
 sidebar:
-  name: "Tobias Schröder"
-  avatar: "/Images/TobiasWA.jpg"
-  location: "Department of Mathematics \n Imperial College London"
-  links:
+  - name: "Tobias Schröder"
+  - avatar: "/Images/TobiasWA.jpg"
+  - location: "Department of Mathematics \n Imperial College London"
+  - links:
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"
       url: "https://x.com/tobias_schrdr"
