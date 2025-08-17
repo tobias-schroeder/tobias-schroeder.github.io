@@ -16,7 +16,7 @@ plugins:
 author:
   name: "Tobias Schröder"
   avatar: "/Images/TobiasHelens.jpg"
-  location: "Department of Mathematics \n Imperial College London"
+  location: "Department of Mathematics <br>Imperial College London"
   links:
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"
