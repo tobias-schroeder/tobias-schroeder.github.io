@@ -5,5 +5,4 @@ excerpt: "We introduce a principled online method to approximate the softmax att
 order: 1
 ---
 
-Our preprint can be found here: https://arxiv.org/abs/2602.10056
-Stay tuned for our blogpost!
+Our preprint can be found here: https://arxiv.org/abs/2602.10056. Stay tuned for our blogpost!
