@@ -1,11 +1,11 @@
 /* ── Font size ─────────────────────────────────────────────────── */
 html {
-  font-size: 15px;
+  font-size: 13px;
 }
 
 @media (min-width: 80em) {
   html {
-    font-size: 16px;
+    font-size: 13px;
   }
 }
 
@@ -23,27 +23,66 @@ html {
   margin-top: 1.5rem;
 }
 
+/* On wider screens: single-column with image on the right */
+@media (min-width: 48em) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-card--has-image {
+    flex-direction: row;
+  }
+
+  .project-card--has-image .project-card__image {
+    order: 2;
+    width: 38%;
+    flex-shrink: 0;
+  }
+
+  .project-card--has-image .project-card__image img {
+    width: 100%;
+    height: 100%;
+    min-height: 180px;
+  }
+
+  .project-card--has-image .project-card__body {
+    order: 1;
+    flex: 1;
+  }
+}
+
+/* On small screens: single column, image on top */
+@media (max-width: 47.99em) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .project-card {
   background: #fff;
   border: 1px solid #ddd;
-  border-radius: 6px;
+  border-radius: 12px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  text-decoration: none;
-  color: inherit;
   transition: box-shadow 0.2s ease, transform 0.15s ease;
+  /* Reset all link styling */
+  color: #222 !important;
+  text-decoration: none !important;
+}
+
+.project-card:link,
+.project-card:visited,
+.project-card:hover,
+.project-card:active,
+.project-card:focus {
+  color: #222 !important;
+  text-decoration: none !important;
 }
 
 .project-card:hover {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
   transform: translateY(-3px);
-  text-decoration: none;
-  color: inherit;
-}
-
-.project-card:visited {
-  color: inherit;
 }
 
 .project-card__image img {
@@ -65,14 +104,17 @@ html {
   font-weight: 700;
   margin: 0 0 0.55rem;
   line-height: 1.35;
+  color: #111 !important;
+  text-decoration: none !important;
 }
 
 .project-card__summary {
   font-size: 0.875rem;
-  color: #555;
+  color: #555 !important;
   line-height: 1.6;
   margin: 0;
   flex: 1;
+  text-decoration: none !important;
 }
 
 .project-card__link {
@@ -92,7 +134,19 @@ html {
     border-color: #333;
   }
 
+  .project-card,
+  .project-card:link,
+  .project-card:visited,
+  .project-card:hover,
+  .project-card:active {
+    color: #e0e0e0 !important;
+  }
+
+  .project-card__title {
+    color: #f0f0f0 !important;
+  }
+
   .project-card__summary {
-    color: #aaa;
+    color: #aaa !important;
   }
 }
