@@ -18,44 +18,9 @@ html {
 /* ── Projects grid ─────────────────────────────────────────────── */
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: 1fr;
   gap: 1.5rem;
   margin-top: 1.5rem;
-}
-
-/* On wider screens: single-column with image on the right */
-@media (min-width: 48em) {
-  .projects-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .project-card--has-image {
-    flex-direction: row;
-  }
-
-  .project-card--has-image .project-card__image {
-    order: 2;
-    width: 38%;
-    flex-shrink: 0;
-  }
-
-  .project-card--has-image .project-card__image img {
-    width: 100%;
-    height: 100%;
-    min-height: 180px;
-  }
-
-  .project-card--has-image .project-card__body {
-    order: 1;
-    flex: 1;
-  }
-}
-
-/* On small screens: single column, image on top */
-@media (max-width: 47.99em) {
-  .projects-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 .project-card {
@@ -87,7 +52,6 @@ html {
 
 .project-card__image img {
   width: 100%;
-  height: 175px;
   object-fit: cover;
   display: block;
 }

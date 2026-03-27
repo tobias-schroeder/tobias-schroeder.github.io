@@ -7,7 +7,7 @@ permalink: /projects/
 <div class="projects-grid">
   {% assign sorted_projects = site.projects | sort: "order" %}
   {% for project in sorted_projects %}
-  <a class="project-card{% if project.image %} project-card--has-image{% endif %}" href="{{ project.url | relative_url }}">
+  <a class="project-card" href="{{ project.url | relative_url }}">
     {% if project.image %}
     <div class="project-card__image">
       <img src="{{ project.image | relative_url }}" alt="{{ project.title }}">
