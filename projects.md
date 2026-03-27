@@ -1,13 +1,23 @@
 ---
-layout: posts
+layout: single
 title: Projects
 permalink: /projects/
 ---
 
-#### How to train your EBM without Markov Chain Monte Carlo
-We propose a new training methodology for energy-based models based on Energy Discrepancy (ED) which does not rely on sampling (like contrastive divergence, short CD) or Stein scores (as in score-based methods, short SM). The goal are robust unbiased models for high-dimensional data. Our paper **"Energy Discrepancies: A Score-Independent Loss for Energy-Based Models"** can be accessed [here](https://arxiv.org/abs/2307.06431). An extension to energy-based models on discrete spaces has been presented at the ICML 2023 workshop *Sampling and Optimisation in Discrete Spaces* and can be found [here](https://arxiv.org/abs/2307.07595)
-![EBMasGenerativeModel](Images/ComparisonED_SM_CD.png)
-
-#### Variational Inference as a gradient flow in a kernelised Wasserstein geometry
-Variational Inference optimises a training objective with gradient descent to infer optimal parameters in a parametric family of distributions, for example, to compute an approximate Bayesian posterior distribution. For my Master thesis, I formulated the training dynamics as a gradient flow in a kernelised Wasserstein geometry based on the results on [Stein geometries](https://arxiv.org/abs/1912.00894) and a [relationship between gradient flows and black box variational inference](https://arxiv.org/abs/2004.01822)
-![ParticleTransport](Images/ParticleTransport.png)
+<div class="projects-grid">
+  {% assign sorted_projects = site.projects | sort: "order" %}
+  {% for project in sorted_projects %}
+  <a class="project-card{% if project.image %} project-card--has-image{% endif %}" href="{{ project.url | relative_url }}">
+    {% if project.image %}
+    <div class="project-card__image">
+      <img src="{{ project.image | relative_url }}" alt="{{ project.title }}">
+    </div>
+    {% endif %}
+    <div class="project-card__body">
+      <h3 class="project-card__title">{{ project.title }}</h3>
+      <p class="project-card__summary">{{ project.excerpt | strip_html | truncatewords: 45 }}</p>
+      <span class="project-card__link">Read more →</span>
+    </div>
+  </a>
+  {% endfor %}
+</div>

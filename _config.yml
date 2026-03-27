@@ -6,6 +6,18 @@ minimal_mistakes_skin: "contrast"
 plugins:
   - jekyll-include-cache
 
+collections:
+  projects:
+    output: true
+    permalink: /projects/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: projects
+    values:
+      layout: single
+
 author:
   name: "Tobias Schröder"
   avatar: "Images/TobiasHelens.jpg"
