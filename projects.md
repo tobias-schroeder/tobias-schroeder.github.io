@@ -1,13 +1,35 @@
 ---
-layout: posts
+layout: page
 title: Projects
 permalink: /projects/
 ---
 
-#### How to train your EBM without Markov Chain Monte Carlo
-We propose a new training methodology for energy-based models based on Energy Discrepancy (ED) which does not rely on sampling (like contrastive divergence, short CD) or Stein scores (as in score-based methods, short SM). The goal are robust unbiased models for high-dimensional data. Our paper **"Energy Discrepancies: A Score-Independent Loss for Energy-Based Models"** can be accessed [here](https://arxiv.org/abs/2307.06431). An extension to energy-based models on discrete spaces has been presented at the ICML 2023 workshop *Sampling and Optimisation in Discrete Spaces* and can be found [here](https://arxiv.org/abs/2307.07595)
-![EBMasGenerativeModel](Images/ComparisonED_SM_CD.png)
+This page now uses a responsive tile layout to keep the design minimal and readable, while making it easy to add project detail pages or external paper links.
 
-#### Variational Inference as a gradient flow in a kernelised Wasserstein geometry
-Variational Inference optimises a training objective with gradient descent to infer optimal parameters in a parametric family of distributions, for example, to compute an approximate Bayesian posterior distribution. For my Master thesis, I formulated the training dynamics as a gradient flow in a kernelised Wasserstein geometry based on the results on [Stein geometries](https://arxiv.org/abs/1912.00894) and a [relationship between gradient flows and black box variational inference](https://arxiv.org/abs/2004.01822)
-![ParticleTransport](Images/ParticleTransport.png)
+<div class="project-grid">
+{% for project in site.data.projects %}
+  <article class="project-card">
+    <a href="{{ project.details_path | default: project.external_link }}" class="project-card-link" aria-label="{{ project.title }}">
+      <img src="{{ project.image }}" alt="{{ project.title }}" loading="lazy" />
+    </a>
+    <div class="project-card-content">
+      <h3 class="project-card-title">
+        {% if project.details_path %}
+          <a href="{{ project.details_path }}">{{ project.title }}</a>
+        {% else %}
+          {{ project.title }}
+        {% endif %}
+      </h3>
+      <p>{{ project.summary }}</p>
+      <p class="project-card-tags">{% for tag in project.tags %}<span>{{ tag }}</span>{% unless forloop.last %}, {% endunless %}{% endfor %}</p>
+      <p class="project-card-actions">
+        {% if project.external_link %}<a href="{{ project.external_link }}" class="project-btn" target="_blank" rel="noopener">Paper / Report</a>{% endif %}
+        {% if project.details_path %}<a href="{{ project.details_path }}" class="project-btn">Read more</a>{% endif %}
+      </p>
+    </div>
+  </article>
+{% endfor %}
+</div>
+
+> Tip: create a Markdown post under `_posts/` with the URL path in `details_path` and that page will be linked from each card for extended project stories.
+
