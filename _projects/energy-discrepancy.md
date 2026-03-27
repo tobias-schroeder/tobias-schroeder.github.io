@@ -2,7 +2,7 @@
 title: "How to train your EBM without Markov Chain Monte Carlo"
 image: "/Images/ComparisonED_SM_CD.png"
 excerpt: "We propose Energy Discrepancy (ED), a new training methodology for energy-based models that avoids sampling-based methods like contrastive divergence and Stein-score-based approaches, enabling robust and unbiased models for high-dimensional data."
-order: 1
+order: 2
 ---
 
 We propose a new training methodology for energy-based models (EBMs) based on **Energy Discrepancy (ED)** — a loss function that does not rely on sampling (like contrastive divergence, short CD) or Stein scores (as in score-based methods, short SM). The goal is to enable robust, unbiased models for high-dimensional data without the computational overhead and approximation errors introduced by Markov Chain Monte Carlo methods.

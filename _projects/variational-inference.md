@@ -2,7 +2,7 @@
 title: "Variational Inference as a Gradient Flow in a Kernelised Wasserstein Geometry"
 image: "/Images/ParticleTransport.png"
 excerpt: "For my Master's thesis, I formulated variational inference training dynamics as a gradient flow in a kernelised Wasserstein geometry, connecting Stein geometries with black-box variational inference."
-order: 2
+order: 3
 ---
 
 Variational Inference (VI) optimises a training objective with gradient descent to infer optimal parameters in a parametric family of distributions — for example, to compute an approximate Bayesian posterior.
