@@ -1,25 +1,42 @@
 ---
 title: "Near-linear softmax attention in theory and practice via weighted coresets"
-image: "/Images/plot_runtime_vs_seqlen.png"
-excerpt: "We introduce WILDCAT, a principled method to approximate the softmax attention mechanism from a small coreset of reweighted keys and values. This enables accurate inference for long context tasks at a fraction of the computational cost and memory footprint."
+image: "/Images/VisualisationKDE.pdf"
+excerpt: "We introduce a principled online method to approximate the softmax attention mechanism from a coreset of reweighted keys and values. This enables accurate inference for long context tasks at a fraction of the computational cost and memory footprint."
 order: 1
 ---
 
-The **attention mechanism** is arguably the most important building block in modern machine learning. Transformers power large language models, image generators, and protein structure predictors alike. But attention has a fundamental cost: it scales **quadratically** with the sequence length. Process a sequence twice as long, and attention takes four times as long. For long documents, high-resolution images, or extended conversations, this becomes prohibitive.
+## Overview
 
-This is the problem WILDCAT solves.
+WildCat (Weighted Iterative Low-rank Decomposition for Coreset ATtention) is a drop-in replacement for scaled dot-product attention that faithfully approximates exact attention in near-linear time. The core of WildCat is `compress_kv`, an efficient algorithm for compressing the key-value sequence into a small weighted coreset. WildCat can be used to either accelerate non-causal attention at inference time or to compress a pre-computed KV cache to near-constant size.
 
-## The Core Idea
+## How It Works
+The goal of WildCat is the approximation of the softmax (or scaled dot-product) attention mechanism
 
-WILDCAT (**W**eighted **I**terative **L**ow-rank **D**ecomposition for **C**oreset **AT**tention) approximates exact softmax attention by attending only over a small, carefully chosen subset of keys — a *coreset*. Crucially, the keys in the coreset are not just selected but also **optimally reweighted** to minimise reconstruction error, making the approximation far more accurate than simple subsampling.
+$$\text{Attn}(Q, K, V) = \text{softmax}\left(\beta Q  K^\top \right) V$$
 
-The key insight is that the attention matrix can be well-approximated using a low-rank Nyström approximation of the key kernel matrix. Rather than computing attention over all *n* keys, WILDCAT selects *r ≪ n* representative keys and forms weighted compressed keys and values that summarise the full context.
+for $Q, K, V\in \mathbb R^{n\times d}$ and scale parameter $\beta = \sqrt{d}^{-1}$. Computing $\text{Attn}(Q, K, V)$ exactly requires evaluating all $n^2$ entries of the attention matrix $A = \exp\left(\beta Q  K^\top\right)$, giving quadratic time complexity in the sequence length $n$. WildCat avoids this cost by finding a **low-rank approximation** $\widehat{A} = \exp\left(\beta Q  K_{\mathcal S}^\top\right) W$ with $W \in \mathbb R^{r\times n}$ and $K_{\mathcal S}$ a small subset of $r$ rows of $K$. This factorisation reduces approximate attention to $O(nr)$ operations:
 
-## Coreset Selection via Randomly Pivoted Cholesky
+$$
+\widehat{\text{Attn}}(Q, K, V) = \frac{\exp\left(\beta Q  K_{\mathcal S}^\top \right) (W V)}{\exp\left(\beta Q  K_{\mathcal S}^\top\right) (W\boldsymbol 1_{n})}
+$$
 
-The coreset is selected using a **randomly pivoted Cholesky (RPC)** algorithm, which builds a partial Cholesky decomposition of the key kernel matrix. At each step, the next coreset point is sampled proportionally to the diagonal of the *residual* kernel — favouring keys that are least well-explained by the current coreset. This simple rule turns out to be spectrally optimal: it produces the best possible Nyström approximation in expectation.
+#### A Nyström-based weighting scheme
+The weights $W$ are chosen to minimise the feature-wise approximation error $\sum_{s \in \mathcal S}\exp(\beta\langle k_s, \cdot \rangle)W_{sl} \approx \exp(\beta\langle k_l, \cdot \rangle)$ for all rows $k_l \in \mathbb R^d$ of $K$. Solving the associated **regression** problem yields the Nyström weights
 
-Combined with an **optimal reweighting** via Nyström weights, the resulting approximation is near-optimal among all rank-*r* approximations to the attention matrix.
+$$
+W = \exp\left(\tfrac{\beta}{\tau^2} K_{\mathcal S}K_{\mathcal S}^\top\right)^{-1}\exp\left(\tfrac{\beta}{\tau^2} K_{\mathcal S}K^\top\right)\,.
+$$
+
+The parameter $\tau$ is a free parameter; we derive a closed-form expression that balances low-rank approximability of the key matrix against query-induced error inflation. A key advantage of WildCat is that all keys and values participate in forming the compressed representation, while no access to the queries is needed at compression time.
+
+<p align="center">
+  <img src="../Images/WeightedCoresetAttention.png" alt="Weighted Coreset Attention" width="100%"/>
+</p>
+
+#### Coreset selection through randomly pivoted Cholesky
+The coreset indices $\mathcal S\subseteq \{1, 2, \dots, n\}$ and the Nyström weights $W$ are determined in tandem through an adaptation of the [randomly pivoted Cholesky](https://arxiv.org/abs/2207.06503) algorithm which we call `rp_nystrom`. As a result, the compression is fast and numerically stable, requiring only $O(nr^2)$ operations and no explicit matrix inversion. In our [paper](https://arxiv.org/abs/2602.10056) we show that a near-constant coreset size $r\in n^{o(1)}$ suffices to approximate attention with super-polynomial $O(n^{-\sqrt{\log\log n}})$ error decay — faster than any fixed polynomial $n^{-a}$. In consequence, WildCat offers a near-linear attention surrogate in theory and in practice.
+
+---
 
 ## Runtime and Error Guarantees
 
@@ -34,9 +51,11 @@ Prior work either required quadratic runtime for fast error decay, or only guara
 
 The plot below shows WILDCAT runtime versus sequence length, compared to FlashAttention 2. FlashAttention already achieves impressive speed through IO-aware tiling, but its runtime still grows **quadratically** — visible as the rapidly accelerating dashed curve. WILDCAT's runtime remains nearly flat across all tested sequence lengths (up to 32,768 tokens), staying well below 100ms while FlashAttention exceeds 1,200ms at the longest sequences.
 
-![Runtime vs sequence length]({{ "/Images/plot_runtime_vs_seqlen.png" | relative_url }})
+<p align="center">
+  <img src="../Images/plot_runtime_vs_seqlen.png" alt="Runtime of FlashAttention and WildCat" width="100%"/>
+</p>
 
-Different curves correspond to different coreset sizes *r* (with the number of parallel bins *B* adjusted accordingly). Even the largest coreset (*r = 512*, purple) remains orders of magnitude faster than exact attention at long sequences.
+Different curves correspond to different coreset sizes *r* (with the number of parallel bins *B* adjusted accordingly).
 
 ## KV Cache Compression
 
@@ -51,7 +70,15 @@ Beyond language models, WILDCAT was evaluated as a drop-in replacement for exact
 - **BigGAN image generation**: WILDCAT achieved the largest speed-up (3.71× over exact attention), the lowest Inception Score degradation (1.4%), and no degradation in Fréchet Inception Distance — outperforming Reformer, ScatterBrain, Performer, KDEformer, and Thinformer on all metrics simultaneously.
 - **T2T-ViT image classification**: WILDCAT achieved the highest Top-1 accuracy among all approximations (82.18% vs. 82.55% for exact attention) while also running the fastest — an 11.6× speed-up on the dominant attention layer.
 
-## Papers and Code
+## Citation
 
-- **"WILDCAT: Near-Linear Attention in Theory and Practice"** with Lester Mackey — [arXiv:2602.10056](https://arxiv.org/abs/2602.10056)
-- Open-source PyTorch implementation: [github.com/microsoft/wildcat](https://github.com/microsoft/wildcat)
+[WildCat: Near-Linear Attention in Theory and Practice](https://arxiv.org/abs/2602.10056)
+
+```bibtex
+@article{schroder2026wildcat,
+  title={WildCat: Near-Linear Attention in Theory and Practice},
+  author={Schr{\"o}der, Tobias and Mackey, Lester},
+  journal={arXiv preprint arXiv:2602.10056},
+  year={2026}
+}
+```
