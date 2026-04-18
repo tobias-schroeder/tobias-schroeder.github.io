@@ -29,9 +29,7 @@ $$
 
 The parameter $\tau$ is a free parameter; we derive a closed-form expression that balances low-rank approximability of the key matrix against query-induced error inflation. A key advantage of WildCat is that all keys and values participate in forming the compressed representation, while no access to the queries is needed at compression time.
 
-<p align="center">
-  <img src="../Images/WeightedCoresetAttention.png" alt="Weighted Coreset Attention" width="100%"/>
-</p>
+![Weighted Coreset Attention]({{ "/Images/WeightedCoresetAttention.png" | relative_url }})
 
 #### Coreset selection through randomly pivoted Cholesky
 The coreset indices $\mathcal S\subseteq \{1, 2, \dots, n\}$ and the Nyström weights $W$ are determined in tandem through an adaptation of the [randomly pivoted Cholesky](https://arxiv.org/abs/2207.06503) algorithm which we call `rp_nystrom`. As a result, the compression is fast and numerically stable, requiring only $O(nr^2)$ operations and no explicit matrix inversion. In our [paper](https://arxiv.org/abs/2602.10056) we show that a near-constant coreset size $r\in n^{o(1)}$ suffices to approximate attention with super-polynomial $O(n^{-\sqrt{\log\log n}})$ error decay — faster than any fixed polynomial $n^{-a}$. In consequence, WildCat offers a near-linear attention surrogate in theory and in practice.
@@ -51,9 +49,7 @@ Prior work either required quadratic runtime for fast error decay, or only guara
 
 The plot below shows WILDCAT runtime versus sequence length, compared to FlashAttention 2. FlashAttention already achieves impressive speed through IO-aware tiling, but its runtime still grows **quadratically** — visible as the rapidly accelerating dashed curve. WILDCAT's runtime remains nearly flat across all tested sequence lengths (up to 32,768 tokens), staying well below 100ms while FlashAttention exceeds 1,200ms at the longest sequences.
 
-<p align="center">
-  <img src="../Images/plot_runtime_vs_seqlen.png" alt="Runtime of FlashAttention and WildCat" width="100%"/>
-</p>
+![Runtime of FlashAttention and WildCat]({{ "/Images/plot_runtime_vs_seqlen.png" | relative_url }})
 
 Different curves correspond to different coreset sizes *r* (with the number of parallel bins *B* adjusted accordingly).
 
