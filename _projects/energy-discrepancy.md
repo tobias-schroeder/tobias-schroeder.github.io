@@ -30,7 +30,7 @@ On discrete data, where gradients are not available, people typically opt for ps
 <figure class="half">
     <img src="{{ '/Images/loss_mixture.png' | relative_url }}" alt="Loss landscape on a Gaussian mixture">
     <img src="{{ '/Images/mixture_estimates.png' | relative_url }}" alt="MSE of mixture-weight estimates vs. t">
-    <figcaption>Local losses like score matching (SM) fail to capture global properties of a distribution such as mixture weights in a bimodal distribution. Maximum likelihood estimation (MLE) is generally preferable, but is often intractable. Energy Discrepancy (ED) let's us interpolate between them - the variance of the estimator decreases as ED approximates MLE with increasing $t$ parameter. c.</figcaption>
+    <figcaption>Local losses like score matching (SM) fail to capture global properties of a distribution such as mixture weights in a bimodal distribution. Maximum likelihood estimation (MLE) is generally preferable, but is often intractable. Energy Discrepancy (ED) let's us interpolate between them - the variance of the estimator decreases as ED approximates MLE with increasing $t$ parameter.</figcaption>
 </figure>
 
 ## Energy Discrepancies: Broadening the design space for probabilistic self-supervised learning
