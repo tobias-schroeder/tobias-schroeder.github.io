@@ -21,7 +21,7 @@ using short runs of a Markov chain Monte Carlo (MCMC) method to approximate the 
 
 An alternative path consists in using local loss functions which are tractable, albeit costly. The most common one is score matching (Hyvärinen & Dayan, 2005): instead of comparing densities directly, one compares their score functions $$\nabla_x \log p_\text{data}$$ and $$\nabla_x \log p_\theta$$, which are by construction independent of the normalising constant. After an integration by parts, this yields the score matching loss
 
-$$\text{SM}(p_\text{data}, U_\theta) = \mathbb{E}_{p_\text{data}(x)}\left[-\Delta_x U_\theta(x) + \frac{1}{2}\lvert\nabla_x U_\theta(x)\rvert^2\right]$$
+$$\text{SM}(p_\text{data}, U_\theta) = \mathbb{E}_{p_\text{data}(x)}\left[-\Delta_x U_\theta(x) + \frac{1}{2}\lvert\nabla_x U_\theta(x)\rvert^2\right]\,,$$
  
  which can be estimated directly from data. However, since the score is a local quantity, score-based methods are _nearsighted_: in a mixture of well-separated distributions, the score matching loss decomposes into a sum of local objectives that only see each mode individually and are unable to resolve the mixture weights (Song & Ermon, 2019; Zhang et al., 2022).
 
@@ -30,7 +30,7 @@ On discrete data, where gradients are not available, people typically opt for ps
 <figure class="half">
     <img src="{{ '/Images/loss_mixture.png' | relative_url }}" alt="Loss landscape on a Gaussian mixture">
     <img src="{{ '/Images/mixture_estimates.png' | relative_url }}" alt="MSE of mixture-weight estimates vs. t">
-    <figcaption>Local losses like score matching (SM) fail to capture global properties of a distribution such as mixture weights in a bimodal distribution. Maximum likelihood estimation (MLE) is generally preferable, but is often intractable. Energy Discrepancy (ED) let's us interpolate between them - the variance of the estimator decreases as ED approximates MLE with increasing $$t$$ parameter. c.</figcaption>
+    <figcaption>Local losses like score matching (SM) fail to capture global properties of a distribution such as mixture weights in a bimodal distribution. Maximum likelihood estimation (MLE) is generally preferable, but is often intractable. Energy Discrepancy (ED) let's us interpolate between them - the variance of the estimator decreases as ED approximates MLE with increasing $t$ parameter. c.</figcaption>
 </figure>
 
 ## Energy Discrepancies: Broadening the design space for probabilistic self-supervised learning
@@ -43,13 +43,18 @@ By definition, energy discrepancy only depends on the energy function and is ind
 
 The validity of this approach is characterised by a non-parametric estimation result: under mild technical assumptions, energy discrepancy is functionally convex in $$U$$ and has a unique global minimiser. This means that minimising energy discrepancy provably recovers the data distribution, giving ED a well-defined objective with a clear theoretical optimum — in contrast to contrastive divergence, which is not the gradient of any fixed objective function. The crucial assumption is that the data distribution $$p_\text{data}$$ has full support, which turns out to be important when scaling energy discrepancy to high-dimensional data under the manifold hypothesis.
 
-For Euclidean data with a Gaussian perturbation kernel $$\gamma_t(y-x) \propto \exp(-\lvert y-x\rvert^2/2t)$$, the energy discrepancy can be expressed as a multi-noise-scale score matching loss, $$\text{ED}_{\gamma_t}(p_\text{data}, U) = \int_0^t \text{SM}(p_s, U_s)\,\mathrm{d}s$$. This reveals that ED effectively integrates score matching objectives over a range of noise scales $$[0,t]$$, which alleviates the nearsightedness problem since the perturbed data distribution is more spread out. Furthermore, the Gaussian-based energy discrepancy converges to the loss of maximum likelihood estimation at a linear rate in time: $$\lvert\text{ED}_{\gamma_t}(p_\text{data}, U) + \mathbb{E}_{p_\text{data}(x)}[\log p_\text{ebm}(x)] - c(t)\rvert \leq \frac{1}{2t}W_2^2(p_\text{data}, p_\text{ebm})$$, where $$c(t)$$ is independent of $$U$$ and $$W_2$$ denotes the Wasserstein distance. In other words, energy discrepancy interpolates between score matching for small $$t$$ and maximum likelihood estimation for large $$t$$, thus enjoying the attractive global properties of MLE while retaining a tractable, score-free loss. Similar statements can be obtained in the discrete case, too.
+For Euclidean data with a Gaussian perturbation kernel $$\gamma_t(y-x) \propto \exp(-\lvert y-x\rvert^2/2t)$$, the energy discrepancy can be expressed as a multi-noise-scale score matching loss, $$\text{ED}_{\gamma_t}(p_\text{data}, U) = \int_0^t \text{SM}(p_s, U_s)\,\mathrm{d}s$$. This reveals that ED effectively integrates score matching objectives over a range of noise scales $$[0,t]$$, which alleviates the nearsightedness problem since the perturbed data distribution is more spread out. Furthermore, the Gaussian-based energy discrepancy converges to the loss of maximum likelihood estimation at a linear rate in time: 
+
+$$\lvert\text{ED}_{\gamma_t}(p_\text{data}, U) + \mathbb{E}_{p_\text{data}(x)}[\log p_\text{ebm}(x)] - c(t)\rvert \leq \frac{1}{2t}W_2^2(p_\text{data}, p_\text{ebm})\,,$$
+
+where $$c(t)$$ is independent of $$U$$ and $$W_2$$ denotes the Wasserstein distance. In other words, energy discrepancy interpolates between score matching for small $$t$$ and maximum likelihood estimation for large $$t$$, thus enjoying the attractive global properties of MLE while retaining a tractable, score-free loss. Similar statements can be obtained in the discrete case, too.
 
 ## Energy Discrepancies in practice
 
 For Euclidean data $${x^i} \subset \mathbb{R}^d$$ and a Gaussian perturbation kernel, energy discrepancy can be approximated from samples after noticing that the contrastive potential $$U_t$$ of perturbed data can be written as an expectation $$U_t(x^i_t) = -\log \mathbb{E}_{\gamma_1(\xi')}[\exp(-U(x^i_t + \sqrt{t}\,\xi'))]$$, which can be estimated by sampling $$\xi'^{i,j} \sim \mathcal{N}(0, I)$$. However, a naive Monte Carlo approximation is biased due to the logarithm and prone to numerical instabilities. To stabilise training, we augment the estimate by an additional term $$w/M \cdot \exp(-U(x^i))$$, called _w-stabilisation_, which provides a deterministic upper bound for the approximate contrastive potential and reduces the variance of the estimation. The full loss is then formed with tunable hyperparameters $$t$$, $$M$$, $$w$$ as
 
 $$\mathcal{L}_{t,M,w}(\theta) := \frac{1}{N}\sum_{i=1}^N \log\left(\frac{w}{M} + \frac{1}{M}\sum_{j=1}^M \exp\left(U_\theta(x^i) - U_\theta(x^i + \sqrt{t}\,\xi^i + \sqrt{t}\,\xi'^{i,j})\right)\right),$$
+
 evaluated using the numerically stabilised logsumexp function. Each loss contribution only requires $$M$$ forward evaluations of the energy function per data point in parallel — no spatial gradients and no MCMC sampling. In practice, the hyperparameter $$t$$ controls the degree of nearsightedness (small $$t$$ recovers score matching, large $$t$$ approaches MLE), $$M$$ controls the variance of the contrastive potential estimate, and $$w$$ stabilises training by softly bounding the contrastive potential — larger $$w$$ leads to flatter energy landscapes while smaller $$w$$ yields steeper ones. Improved estimates of the energy discrepancy loss are possible, for example, through importance sampling.
 
 The result is substantial improvements in training stability and estimation quality of energy-based models.
