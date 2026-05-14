@@ -32,30 +32,21 @@ The parameter $\tau$ is a free parameter; we derive a closed-form expression tha
 ![Weighted Coreset Attention]({{ "/Images/WeightedCoresetAttention.png" | relative_url }})
 
 #### Coreset selection through randomly pivoted Cholesky
-The coreset indices $\mathcal S\subseteq \{1, 2, \dots, n\}$ and the Nyström weights $W$ are determined in tandem through an adaptation of the [randomly pivoted Cholesky](https://arxiv.org/abs/2207.06503) algorithm which we call `rp_nystrom`. As a result, the compression is fast and numerically stable, requiring only $O(nr^2)$ operations and no explicit matrix inversion. In our [paper](https://arxiv.org/abs/2602.10056) we show that a near-constant coreset size $r\in n^{o(1)}$ suffices to approximate attention with super-polynomial $O(n^{-\sqrt{\log\log n}})$ error decay — faster than any fixed polynomial $n^{-a}$. In consequence, WildCat offers a near-linear attention surrogate in theory and in practice.
-
-## Runtime and Error Guarantees
-
-WILDCAT enjoys the best of both worlds: it is both fast and accurate.
-
-- **Near-linear runtime**: With a coreset of size *r ∈ n^o(1)*, WILDCAT runs in *O(nr²)* time — near-linear in the sequence length.
-- **Super-polynomial error decay**: For bounded inputs, a near-constant coreset size suffices for *O(n^{−√log log n})* error decay. This is dramatically faster than the polynomial decay guaranteed by prior methods, and is the first practical algorithm to achieve super-polynomial error in near-linear time.
-
-Prior work either required quadratic runtime for fast error decay, or only guaranteed slow near-constant decay in near-linear time. WILDCAT closes this theory-practice gap.
+The coreset indices $\mathcal S\subseteq \{1, 2, \dots, n\}$ and the Nyström weights $W$ are determined in tandem through an adaptation of the [randomly pivoted Cholesky](https://arxiv.org/abs/2207.06503) algorithm which we call `rp_nystrom`. As a result, the compression is fast and numerically stable, requiring only $O(nr^2)$ operations and no explicit matrix inversion. In our [paper](https://arxiv.org/abs/2602.10056) we show that a near-constant coreset size $r\in n^{o(1)}$ suffices to approximate attention with super-polynomial $O(n^{-\sqrt{\log\log n}})$ error decay — faster than any fixed polynomial $n^{-a}$. In consequence, WildCat offers a near-linear attention surrogate in theory and in practice. Prior work either required quadratic runtime for fast error decay, or only guaranteed slow near-constant decay in near-linear time. WILDCAT closes this theory-practice gap.
 
 ## Comparison to FlashAttention
 
-The plot below shows WILDCAT runtime versus sequence length, compared to FlashAttention 2. FlashAttention already achieves impressive speed through IO-aware tiling, but its runtime still grows **quadratically** — visible as the rapidly accelerating dashed curve. WILDCAT's runtime remains nearly flat across all tested sequence lengths (up to 32,768 tokens), staying well below 100ms while FlashAttention exceeds 1,200ms at the longest sequences.
+The plot below shows WILDCAT runtime versus sequence length, compared to FlashAttention 2. FlashAttention achieves speed-ups through IO-aware tiling, but its runtime still grows **quadratically**. WILDCAT's runtime increases linearly, staying well below 100ms while FlashAttention exceeds 1,200ms at the longest sequences.
 
 ![Runtime of FlashAttention and WildCat]({{ "/Images/plot_runtime_vs_seqlen.png" | relative_url }})
 
-Different curves correspond to different coreset sizes *r* (with the number of parallel bins *B* adjusted accordingly).
+Different curves correspond to different coreset sizes $r$ (with the number of parallel bins *B* adjusted accordingly).
 
 ## KV Cache Compression
 
-In autoregressive language models, past keys and values are stored in a **KV cache** that grows linearly with context length. WILDCAT's COMPRESSKV algorithm compresses this cache down to *O(r)* entries by running the coreset selection during the *prefill phase*. Subsequent generation then attends only over the compressed cache.
+In autoregressive language models, past keys and values are stored in a **KV cache** that grows linearly with context length. WILDCAT's `compress_kv` algorithm compresses this cache down to $O(r)$ entries by running the coreset selection during the *prefill phase*. Subsequent generation then attends only over the compressed cache.
 
-We evaluated COMPRESSKV on 13 long-context language understanding tasks from LongBench-E, using Qwen2.5-7B-Instruct. COMPRESSKV achieved the **highest average score** across all tasks, outperforming five leading KV cache compression methods (StreamingLLM, PyramidKV, BalanceKV, Uniform, and SnapKV) — all at 25% of the original cache size.
+We evaluated `compress_kv` on 13 long-context language understanding tasks from LongBench-E, using Qwen2.5-7B-Instruct. `compress_kv` achieved the highest average score across all tasks, outperforming five competing KV cache compression methods (StreamingLLM, PyramidKV, BalanceKV, Uniform, and SnapKV) — all at 25% of the original cache size.
 
 ## Image Generation and Classification
 
