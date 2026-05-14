@@ -1,13 +1,13 @@
 ---
-title: "How to train your EBM without Markov Chain Monte Carlo"
+title: "Simulation-free training of energy-based models"
 image: "/Images/ComparisonED_SM_CD.png"
-excerpt: "We propose Energy Discrepancy (ED), a new training methodology for energy-based models that avoids sampling-based methods like contrastive divergence and Stein-score-based approaches, enabling robust and unbiased models for high-dimensional data."
+excerpt: "We propose Energy Discrepancy (ED), a new training methodology for energy-based models that avoids sampling-based methods like contrastive divergence while yielding stronger estimators than score-based methods."
 order: 2
 ---
 
 ## What are energy-based models and why are they interesting?
 
-Energy-Based Models (EBMs) are a class of parametric unnormalised probabilistic models of the general form $$p_\text{ebm} \propto \exp(−U)$$ originally inspired by statistical physics. In principle, any positive probability density can be modelled by an energy-function. In particular, modelling the distribution of data makes no assumption about the downstream direction of inference. This enables flexible inferences over $$p_\text{ebm}(x \mid x\in A) \propto \exp(−U(x))\boldsymbol{1}_A(x)$$ for any sufficiently regular set $$A$$ and makes energy-based models suitable in a wide range of applications such as conditional and compositional data generation, calibrated prediction, anomaly detection, or concept learning.
+Energy-Based Models (EBMs) are a class of parametric unnormalised probabilistic models of the general form $$p_\text{ebm} \propto \exp(−U)$$, originally inspired by statistical physics. In principle, any positive probability density can be modelled by an energy-function. By modelling the joint distribution of, for example, two inputs $x$ and $y$, energy-based models can be used to describe if $x, y$ are **compatible** with each other without specifying a functional relationship of the form $y = f(x)$. In consequence, many-to-many relationships or non-standard stochasticity of $y\mid x$ can be captured in a single probabilistic model. In general, energy-based models are useful tools in a wide range of applications such as conditional and compositional data generation, calibrated prediction, anomaly detection, or concept learning.
 
 ## Why maximum likelihood estimation is challenging
 
@@ -15,7 +15,7 @@ We would like to estimate a neural data density using maximum likelihood estimat
 
 $$\nabla_\theta \log p_\theta(x) = \mathbb{E}_{p_\theta(y)}[\nabla_\theta E_\theta(y)] - \nabla_\theta E_\theta(x)$$
 
-using short runs of a Markov chain Monte Carlo (MCMC) method to approximate the expectation under $$p_\theta$$. For computational efficiency, the Markov chain is only run for a small number of steps. As a result, contrastive divergence does not learn the maximum-likelihood estimator and can produce malformed estimates of the energy function (Nijkamp et al., 2020a). In particular, short-run MCMC leads to flattened energy landscapes that assign non-negligible probability mass outside the data support. This can, in part, be attributed to the fact that contrastive divergence is not the gradient of any fixed objective function (Sutskever & Tieleman, 2010), which severely limits the theoretical understanding of CD and has motivated various adjustments of the algorithm (Du et al., 2021).
+using short runs of a Markov chain Monte Carlo (MCMC) method to approximate the expectation under $$p_\theta$$. For computational efficiency, the Markov chain is only run for a small number of steps. As a result, contrastive divergence does not learn the maximum-likelihood estimator and can produce malformed estimates of the energy function (Nijkamp et al., 2020). In particular, short-run MCMC leads to flattened energy landscapes that assign non-negligible probability mass outside the data support. This can, in part, be attributed to the fact that contrastive divergence is not the gradient of any fixed objective function (Sutskever & Tieleman, 2010), which severely limits the theoretical understanding of CD and has motivated various adjustments of the algorithm (Du et al., 2021).
 
 ## Why tractable local losses can be insufficient
 
@@ -25,7 +25,7 @@ $$\text{SM}(p_\text{data}, U_\theta) = \mathbb{E}_{p_\text{data}(x)}\left[-\Delt
  
  which can be estimated directly from data. However, since the score is a local quantity, score-based methods are _nearsighted_: in a mixture of well-separated distributions, the score matching loss decomposes into a sum of local objectives that only see each mode individually and are unable to resolve the mixture weights (Song & Ermon, 2019; Zhang et al., 2022).
 
-On discrete data, where gradients are not available, people typically opt for pseudo-likelihood estimation (Besag, 1975). Pseudo-likelihood replaces the intractable joint likelihood with a product of conditional likelihoods $$\prod_i p_\theta(x_i \mid x_{\setminus i})$$, each of which involves a normalisation over a single variable rather than the full configuration space. While this makes the objective tractable and consistent, pseudo-likelihood is also a local method: each conditional only captures the dependence of one variable on its neighbours, making it difficult to learn long-range structure in the distribution. Like score matching, it can therefore struggle to capture global features such as the relative weights of well-separated modes.
+On discrete data, where gradients are not available, people typically opt for pseudo-likelihood estimation. Pseudo-likelihood replaces the intractable joint likelihood with a product of conditional likelihoods $$\prod_i p_\theta(x_i \mid x_{\setminus i})$$, each of which involves a normalisation over a single variable rather than the full configuration space. While this makes the objective tractable and consistent, pseudo-likelihood is also a local method: each conditional only captures the dependence of one variable on its neighbours, making it difficult to learn long-range structure in the distribution. Like score matching, it can therefore struggle to capture global features such as the relative weights of well-separated modes.
 
 <figure class="half">
     <img src="{{ '/Images/loss_mixture.png' | relative_url }}" alt="Loss landscape on a Gaussian mixture">
@@ -39,9 +39,7 @@ Remarkably, we don't have to decide between intractable losses like maximum like
 
 $$\text{ED}_q(p_\text{data}, U) := \mathbb{E}_{p_\text{data}(x)}[U(x)] - \mathbb{E}_{p_\text{data}(x)}\mathbb{E}_{q(y \mid x)}[U_q(y)].$$
 
-By definition, energy discrepancy only depends on the energy function and is independent of the scores or MCMC samples from the energy-based model. This definition is general: it applies on any measure space, including structured spaces like graphs or tabular data, provided the perturbation $$q$$ involves some loss of information, i.e. $$x$$ cannot be fully recovered from $$y \sim q(y \mid x)$$.
-
-The validity of this approach is characterised by a non-parametric estimation result: under mild technical assumptions, energy discrepancy is functionally convex in $$U$$ and has a unique global minimiser. This means that minimising energy discrepancy provably recovers the data distribution, giving ED a well-defined objective with a clear theoretical optimum — in contrast to contrastive divergence, which is not the gradient of any fixed objective function. The crucial assumption is that the data distribution $$p_\text{data}$$ has full support, which turns out to be important when scaling energy discrepancy to high-dimensional data under the manifold hypothesis.
+By definition, energy discrepancy only depends on the energy function and is independent of the scores or MCMC samples from the energy-based model. This definition is general: it applies on any measure space, including structured spaces like graphs or tabular data, provided the perturbation $$q$$ involves some loss of information, i.e. $$x$$ cannot be fully recovered from $$y \sim q(y \mid x)$$. Under mild technical assumptions, energy discrepancy then has a global minimiser which is unique up to additive constants.
 
 For Euclidean data with a Gaussian perturbation kernel $$\gamma_t(y-x) \propto \exp(-\lvert y-x\rvert^2/2t)$$, the energy discrepancy can be expressed as a multi-noise-scale score matching loss, $$\text{ED}_{\gamma_t}(p_\text{data}, U) = \int_0^t \text{SM}(p_s, U_s)\,\mathrm{d}s$$. This reveals that ED effectively integrates score matching objectives over a range of noise scales $$[0,t]$$, which alleviates the nearsightedness problem since the perturbed data distribution is more spread out. Furthermore, the Gaussian-based energy discrepancy converges to the loss of maximum likelihood estimation at a linear rate in time: 
 
